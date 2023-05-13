@@ -1,0 +1,35 @@
+{
+  "containerDefinitions": [
+    {
+      "name": "sin-simflexcloud-d1-ecs-fargate-blue-green-deployments-container",
+      "image": "REPOSITORY_URI:IMAGE_TAG",
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "dockerLabels": {
+        "name": "sin-simflexcloud-d1-ecs-fargate-blue-green-deployments-container"
+      },
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/sin-simflexcloud-d1-ecs-fargate-blue-green-deployments-fargate-task-definition-log-group",
+          "awslogs-region": "AWS_REGION",
+          "awslogs-stream-prefix": "ecs-fargate-blue-green-deployments"
+        }
+      }
+    }
+  ],
+  "taskRoleArn": "TASK_EXECUTION_ARN",
+  "executionRoleArn": "TASK_EXECUTION_ARN",
+  "family": "simflexcloudecsbluegreendeploymentspipelinemastersinEcsBlueGreenDeploymentsStacksinsimflexcloudd1ecsfargatebluegreendeploymentsfargatetaskdefinitionBA95EEC0",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "1024"
+}

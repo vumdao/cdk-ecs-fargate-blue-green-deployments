@@ -1,0 +1,31 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG --build-arg TAG_VERSION=$IMAGE_TAG .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - echo Update the REPOSITORY_URI:IMAGE_TAG in task definition...
+      - echo Container image to be used $REPOSITORY_URI:$IMAGE_TAG
+      - sed -i 's@REPOSITORY_URI@'$REPOSITORY_URI'@g' taskdef.json
+      - sed -i 's@IMAGE_TAG@'$IMAGE_TAG'@g' taskdef.json
+      - echo update the REGION in task definition...
+      - sed -i 's@AWS_REGION@'$AWS_REGION'@g' taskdef.json
+      - echo update the roles in task definition...
+      - sed -i 's@TASK_EXECUTION_ARN@'$TASK_EXECUTION_ARN'@g' taskdef.json
+      - cat taskdef.json
+artifacts:
+  files:
+    - "appspec.yaml"
+    - "taskdef.json"
