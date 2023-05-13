@@ -110,8 +110,6 @@
 
   <img src=images/deployment-id.png width=700>
 
-  <img src=images/test-green.png width=700>
-
 - ECS run new tasks with new image version on the ECS service
 
   <img src=images/desired-count.png width=700>
