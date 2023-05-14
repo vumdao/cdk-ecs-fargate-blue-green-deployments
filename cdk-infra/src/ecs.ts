@@ -124,7 +124,7 @@ export class EcsBlueGreenDeploymentsStack extends Stack {
     });
 
     /**
-     * Create two task definitions.
+     * Create task definition.
      */
     const taskDefinition = new FargateTaskDefinition(this, `${prefix}-fargate-task-definition`, {
       executionRole: ecsRole,
@@ -166,6 +166,10 @@ export class EcsBlueGreenDeploymentsStack extends Stack {
       }
     });
 
+    /**
+     * Create blue/green target groups.
+     * Listener rule port 80 for prod application and 8080 for test application.
+     */
     const prodListener = alb.addListener(`${prefix}-prod-listener`, { port: 80, open: true });
     const blueTG = prodListener.addTargets(`${prefix}-blue-target-group`, {
       targetGroupName: `simflexcloud-blue-target-group`,
@@ -182,6 +186,9 @@ export class EcsBlueGreenDeploymentsStack extends Stack {
       targets: [service],
     });
 
+    /**
+     * ECS Blue/Green Deployment Group
+     */
     const ecsDeploymentGp = new EcsDeploymentGroup(this, `${prefix}-ecs-deployment-group`, {
       deploymentGroupName: prefix,
       deploymentConfig: EcsDeploymentConfig.LINEAR_10PERCENT_EVERY_1MINUTES,
@@ -195,8 +202,13 @@ export class EcsBlueGreenDeploymentsStack extends Stack {
       },
     });
 
-    // Set this to false at the first deploy to remove the cyclic dependency
-    if (true) {
+    /**
+     * Set this to `false` at the first deploy to remove the cyclic dependency.
+     *  - Build image pipeline depends on ECS stack to create CodeDeploy ECS deployment group.
+     *  - ECS service depends on build image pipeline stack to have the ECR image to run tasks.
+     * Set this to `true` and run `cdk deploy` again.
+     */
+    if (false) {
       buildImagePipeline.addStage({
         stageName: 'Deploy',
         actions: [

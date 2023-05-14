@@ -27,8 +27,9 @@
 - The ECS cluster is placed in private subnet as well as the fargate service. We create ECS service with task defination has desired count 3 and use FARGATE as `requiresCompatibilities`
 - The ECS service is registered to ECS deployment controller with type `CODE_DEPLOY` for handling blue-green deployment. It sticks the application load balancer to replacement target group when deploying successfully.
 - Container image is built with codepipeline and codebuild which store images to ECR.
+- Here is the stacks relationship
 
-  <img src=images/diagram.png width=700>
+  <img src=images/diagram.png width=600>
 
 ## 🚀 **Source code structure** <a name="Source-code-structure"></a>
 - We have two Git repositories (codecommit) one for application project `app-project` directory and other for CDK infrastructure `cdk-infra` directory
@@ -92,7 +93,7 @@
 
       <img src=images/alb-stick-to-green-tg.png width=700>
 
-4. CodeDeploy application and deployment group
+**4. CodeDeploy application and deployment group**
   - A CodeDeploy deployment group that orchestrates ECS blue-green deployments.
 
       <img src=images/app-deployment-group.png width=700>
@@ -106,7 +107,7 @@
 
   <img src=images/deploy-blue-green.png width=700>
 
-- The deploy stage creates codedeploy deployment ID to perform deployment process and handle Traffic shifting progress strategy with rule `LINEAR_10PERCENT_EVERY_1MINUTES`
+- The deploy stage creates codedeploy deployment ID to perform deployment process and handle Traffic shifting progress strategy with rule `LINEAR_10PERCENT_EVERY_1MINUTES` (CodeDeploy predefined deployment configuration that shifts 10 percent of traffic every minute until all traffic is shifted)
 
   <img src=images/deployment-id.png width=700>
 
