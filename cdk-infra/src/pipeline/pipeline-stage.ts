@@ -3,7 +3,6 @@ import { Construct } from 'constructs';
 import { EcsBlueGreenDeploymentsStack } from '../ecs';
 import { EnvironmentConfig } from '../shared/environment';
 import { TagsProp } from '../shared/tagging';
-import { ArchitectureDiagramAspect } from '../arch-dia';
 
 export class EcsBlueGreenDeploymentsPipelineStage extends Stage {
   constructor(
@@ -14,11 +13,7 @@ export class EcsBlueGreenDeploymentsPipelineStage extends Stage {
   ) {
     super(scope, id, props);
 
-    const ecsPipeline = new EcsBlueGreenDeploymentsStack(this, 'EcsBlueGreenDeploymentsStack', reg, { env: reg, tags: TagsProp('ecs-fargate', reg) });
-
-    const archDiagramAspect = new ArchitectureDiagramAspect();
-    archDiagramAspect.visit(ecsPipeline);
-    archDiagramAspect.generateDiagram();
+    new EcsBlueGreenDeploymentsStack(this, 'EcsBlueGreenDeploymentsStack', reg, { env: reg, tags: TagsProp('ecs-fargate', reg) });
 
   }
 }

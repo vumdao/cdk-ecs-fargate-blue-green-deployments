@@ -163,7 +163,10 @@ export class EcsBlueGreenDeploymentsStack extends Stack {
       securityGroups: [fargateSg],
       deploymentController: {
         type: DeploymentControllerType.CODE_DEPLOY
-      }
+      },
+      capacityProviderStrategies: [
+        {capacityProvider: 'FARGATE_SPOT'}
+      ]
     });
 
     /**
