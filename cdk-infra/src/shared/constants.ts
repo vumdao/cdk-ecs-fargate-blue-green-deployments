@@ -16,5 +16,5 @@ export const PROD_STAGE = 'production';
 
 export const PROJECT_OWNER = 'simflexcloud';
 
-export const CDK_DEFAULT_ACCOUNT = '107858015234';
+export const CDK_DEFAULT_ACCOUNT = '123456789012';
 export const CDK_DEFAULT_REGION = 'ap-southeast-1';

@@ -169,6 +169,8 @@ export class EcsBlueGreenDeploymentsStack extends Stack {
       ]
     });
 
+    //const scaleTask = service.autoScaleTaskCount({minCapacity: 3, maxCapacity: 10})
+
     /**
      * Create blue/green target groups.
      * Listener rule port 80 for prod application and 8080 for test application.
